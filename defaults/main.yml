@@ -1,2 +1,2 @@
 ---
-# defaults file for role_remplate
+install_containerd_write_default_config: true

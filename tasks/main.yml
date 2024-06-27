@@ -1,2 +1,78 @@
 ---
-# tasks file for role_remplate
+- name: INSTALL CONTAINERD | Setup docker yum repository
+  ansible.builtin.yum_repository:
+    name: docker-ce
+    description: Docker yum repository
+    mode: "0644"
+    baseurl:
+      - https://download.docker.com/linux/centos/$releasever/$basearch/stable
+    enabled: true
+    gpgcheck: true
+    gpgkey:
+      - https://download.docker.com/linux/centos/gpg
+    state: present
+
+- name: INSTALL CONTAINERD | Ensure containerd is installed
+  ansible.builtin.package:
+    name: containerd.io
+    state: present
+
+- name: INSTALL CONTAINERD | Ensure containerd config directory exists
+  ansible.builtin.file:
+    path: /etc/containerd
+    state: directory
+    mode: "0755"
+
+- name: INSTALL CONTAINERD | Ensure containerd modules are loaded
+  ansible.builtin.copy:
+    dest: "/etc/modules-load.d/containerd.conf"
+    content: |
+      overlay
+      br_netfilter
+    mode: "644"
+  notify: sysctl_reload
+
+- name: INSTALL CONTAINERD | Get defaults from containerd
+  ansible.builtin.command: containerd config default
+  changed_when: false
+  register: containerd_config_default
+  when: install_containerd_write_default_config
+
+- name: INSTALL CONTAINERD | Prepare containerd/config.toml from default config
+  ansible.builtin.copy:
+    dest: /tmp/containerd_config.toml
+    content: "{{ containerd_config_default.stdout }}"
+    mode: "0644"
+  when: install_containerd_write_default_config
+  changed_when: false
+
+- name: INSTALL CONTAINERD | Set Cgroup driver to systemd
+  ansible.builtin.lineinfile:
+    regexp: "SystemdCgroup = false"
+    line: "            SystemdCgroup = true"
+    state: present
+    path: /tmp/containerd_config.toml
+  when: install_containerd_write_default_config
+  changed_when: false
+
+- name: INSTALL CONTAINERD | Copy prepared config.toml to /etc/containerd
+  ansible.builtin.copy:
+    remote_src: true
+    src: /tmp/containerd_config.toml
+    dest: /etc/containerd/config.toml
+    mode: "0644"
+  notify: containerd_restart
+  when: install_containerd_write_default_config
+
+- name: INSTALL CONTAINERD | Enable containerd
+  ansible.builtin.service:
+    name: containerd
+    enabled: true
+
+- name: INSTALL CONTAINERD | Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: INSTALL CONTAINERD | Cleanup temporary file
+  ansible.builtin.file:
+    path: /tmp/containerd_config.toml
+    state: absent

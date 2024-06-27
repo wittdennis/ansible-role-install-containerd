@@ -1,2 +1,12 @@
 ---
-# handlers file for role_remplate
+- name: INSTALL CONTAINERD | Restart containerd
+  listen: containerd_restart
+  ansible.builtin.service:
+    name: containerd
+    state: restarted
+
+- name: INSTALL CONTAINERD | Reload sysctl
+  listen: sysctl_reload
+  ansible.builtin.command:
+    cmd: sysctl --system
+  changed_when: false

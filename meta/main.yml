@@ -2,9 +2,8 @@ galaxy_info:
   author: Dennis Witt
   description: your role description
   namespace: wittdennis
-  role_name: template_role
+  role_name: install_containerd
   license: MIT
-
   min_ansible_version: "2.1"
 
   # If this a Container Enabled role, provide the minimum Ansible Container version.
