@@ -76,3 +76,4 @@
   ansible.builtin.file:
     path: /tmp/containerd_config.toml
     state: absent
+  changed_when: false
