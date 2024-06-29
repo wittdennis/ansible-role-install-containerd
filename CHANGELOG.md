@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [1.0.2](https://github.com/wittdennis/ansible-role-install-containerd/compare/5c2665254fd04de0d069685c6fd500321088f05d..1.0.2) - 2024-06-29
+#### Bug Fixes
+- set changed_when of cleanup job to false to prevent false change reporting - ([5c26652](https://github.com/wittdennis/ansible-role-install-containerd/commit/5c2665254fd04de0d069685c6fd500321088f05d)) - Dennis Witt
+
+- - -
+
 ## [1.0.1](https://github.com/wittdennis/ansible-role-install-containerd/compare/b85830d3516a6482a7f76a54945269ec51caaed5..1.0.1) - 2024-06-29
 #### Bug Fixes
 - set ansible galaxy metadata - ([2bc18d9](https://github.com/wittdennis/ansible-role-install-containerd/commit/2bc18d970942636529be15e52e192d776644c2d6)) - Dennis Witt
