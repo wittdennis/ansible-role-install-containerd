@@ -4,9 +4,5 @@ on:
   push:
 
 jobs:
-  lint:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-      - name: lint
-        uses: ansible/ansible-lint@v24.6.1
+  ansible-lint:
+    uses: wittdennis/.github/.github/workflows/ansible-lint.yaml@master
