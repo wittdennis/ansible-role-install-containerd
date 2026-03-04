@@ -1,11 +1,12 @@
+# code: language=ansible
 ---
-- name: INSTALL CONTAINERD | Restart containerd
+- name: Restart containerd
   listen: containerd_restart
   ansible.builtin.service:
     name: containerd
     state: restarted
 
-- name: INSTALL CONTAINERD | Reload sysctl
+- name: Reload sysctl
   listen: sysctl_reload
   ansible.builtin.command:
     cmd: sysctl --system
